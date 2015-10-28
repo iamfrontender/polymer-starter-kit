@@ -15,6 +15,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
   var app = document.querySelector('#app');
 
+  app.settings = {
+    hosts: {
+      local: localStorage.getItem('localhost') || 'http://192.168.0.12:8080',
+      remote: localStorage.getItem('remotehost') || 'https://api.evrythng.net',
+      wsServer: localStorage.getItem('wsServer') || 'wss://ws-test.evrythng.net:443/mqtt'
+    },
+    appApiKey: localStorage.getItem('apikey') ||
+    'o8xZ4ga4wsY87WpAo8bR8iN398L4bUxgCPiIIbSTOk8nB37FT29l8KnJcHpkZ3SHlXkEM9YbvY20GMOD',
+    pollingPeriod: localStorage.getItem('polling') || 0
+  };
+
   app.displayInstalledToast = function() {
     // Check to make sure caching is actually enabled—it won't be in the dev environment.
     if (!Polymer.dom(document).querySelector('platinum-sw-cache').disabled) {
@@ -31,6 +42,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // See https://github.com/Polymer/polymer/issues/1381
   window.addEventListener('WebComponentsReady', function() {
     // imports are loaded and elements have been registered
+
   });
 
   // Main area's paper-scroll-header-panel custom condensing transformation of
@@ -68,7 +80,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   // Scroll page to top and expand header
   app.scrollPageToTop = function() {
-    app.$.headerPanelMain.scrollToTop(true);
+    //app.$.headerPanelMain.scrollToTop(true);
   };
 
 })(document);

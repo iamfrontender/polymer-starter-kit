@@ -1,0 +1,53 @@
+.scrollable-panel {
+  overflow-y: auto;
+}
+
+section {
+  padding: 0 16px;
+  margin-bottom: 8px;
+}
+
+section:first-of-type {
+  border: 0;
+}
+
+section:last-of-type {
+  margin-bottom: 100px;
+}
+
+paper-fab {
+  position: fixed;
+  bottom: 48px;
+  right: 48px;
+  background: #f5f5f5;
+  color: black;
+  z-index: 13;
+}
+
+paper-toast {
+  bottom: 24px;
+  left: 16px;
+  z-index: 2;
+}
+
+paper-slider {
+  width: 100%;
+}
+
+section > label {
+  display: block;
+  font-size: 0.75em;
+  margin-top: 10px;
+}
+
+paper-slider::shadow #sliderBar::shadow #activeProgress,
+paper-slider::shadow #sliderKnobInner,
+paper-slider::shadow #sliderKnobInner::before,
+paper-input-decorator::shadow .focused-underline
+{
+  background-color: #0288D1;
+}
+
+paper-input-decorator[focused]::shadow .floated-label .label-text {
+  color: #0288D1;
+}

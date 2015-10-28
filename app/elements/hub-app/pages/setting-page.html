@@ -1,0 +1,152 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<dom-module id="settings-page">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <link rel="stylesheet" href="settings-page.css">
+
+    <h1>Settings</h1>
+    <div class="scrollable-panel">
+      <section id="hosts" on-change="validate">
+        <div class="subheader">Hosts</div>
+
+        <paper-input id="localhost"
+                     label="Local Hub Address"
+                     required
+                     auto-validate
+                     error-message="Please type a URL."
+                     type="url"
+                     placeholder="E.g. http://192.168.1.7:8080"
+          ></paper-input>
+
+        <paper-input id="remotehost"
+                     label="EVRYTHNG API Address"
+                     required
+                     auto-validate
+                     error-message="Please type a URL."
+                     type="url"
+                     placeholder="E.g. https://api.evrythng.com"
+          ></paper-input>
+
+        <paper-input id="wsServer"
+                     label="Local hub WebSockets server"
+                     required
+                     auto-validate
+                     error-message="Please type a URL."
+                     type="url"
+                     placeholder="E.g. wss://192.168.0.13:443/mqtt"
+          ></paper-input>
+      </section>
+
+      <section id="authentication" on-change="validate">
+
+        <div class="subheader">Authentication</div>
+
+        <paper-textarea id="apikey"
+                        label="Local hub WebSockets server"
+                        required
+                        auto-validate
+                        placeholder="Application API Key"
+          ></paper-textarea>
+
+      </section>
+
+      <section id="device" on-change="validate">
+
+        <div class="subheader">Device</div>
+
+        <label class="label-text">Property Polling Period (seconds)</label>
+        <paper-slider editable
+                      id="polling"
+                      min="0"
+                      max="5"
+                      snaps="true"
+                      step="1"
+                      pin="true"></paper-slider>
+        <small>
+          Setting Polling Period to 0 will automatically enable subscription via WebSockets.
+        </small>
+
+      </section>
+    </div>
+
+    <paper-fab icon="done" on-tap="updateSettings" disabled?="{{!validForm}}"></paper-fab>
+
+    <!--<paper-toast id="toast" text="Settings updated."></paper-toast>-->
+  </template>
+
+  <script>
+    Polymer({
+      is: 'settings-page',
+
+      refresh: function() {
+        this.$.localhost.value = this.settings.hosts.local;
+        this.$.remotehost.value = this.settings.hosts.remote;
+        this.$.wsServer.value = this.settings.hosts.wsServer;
+        this.$.apikey.value = this.settings.appApiKey;
+        this.$.polling.value = this.settings.pollingPeriod / 1000;
+
+        this.$.localhost.validate();
+        this.$.remotehost.validate();
+        this.$.wsServer.validate();
+        this.$.apikey.validate();
+      },
+
+      ready: function() {
+        this.refresh();
+      },
+
+      validate: function () {
+        this.validForm = this.$.localhost.inputElement.validity.valid &&
+          this.$.remotehost.inputElement.validity.valid &&
+          this.$.wsServer.inputElement.validity.valid &&
+          this.$.apikey.inputElement.textarea.validity.valid;
+      },
+
+      updateSettings: function () {
+        if(this.validForm){
+          this.settings = {
+            hosts: {
+              local: this.$.localhost.value,
+              remote: this.$.remotehost.value,
+              wsServer: this.$.wsServer.value
+            },
+            appApiKey: this.$.apikey.value,
+            pollingPeriod: this.$.polling.value * 1000
+          };
+
+          localStorage.setItem('localhost', this.settings.hosts.local);
+          localStorage.setItem('remotehost', this.settings.hosts.remote);
+          localStorage.setItem('wsServer', this.settings.hosts.wsServer);
+          localStorage.setItem('apikey', this.settings.appApiKey);
+          localStorage.setItem('polling', this.settings.pollingPeriod);
+
+          EVT.setup({
+            apiUrl: this.settings.hosts.remote,
+            localhostUrl: this.settings.hosts.local,
+            apiKey: this.settings.appApiKey
+          });
+
+          EVT.WS.setup({
+            apiUrl: this.settings.hosts.wsServer
+          });
+
+          this.$.toast.show();
+        }
+      }
+    });
+  </script>
+
+</dom-module>

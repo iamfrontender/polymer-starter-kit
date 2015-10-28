@@ -1,0 +1,51 @@
+<link rel="import" href="devices-list-item.html"/>
+
+<dom-module id="devices-list">
+  <template>
+
+    <div class="empty-message self-center" hidden$={{thngs.length}}>
+      No devices yet
+    </div>
+
+    <iron-list items="{{thngs}}" as="thng" id="list" indexAs="id">
+      <template>
+        <devices-list-item>
+          <iron-image src="{{thng.product.photos.0}}" preload sizing="cover"></iron-image>
+          <div class="title">{{thng.name}}</div>
+          <div class="subtitle">{{thng.id}}</div>
+        </devices-list-item>
+      </template>
+    </iron-list>
+  </template>
+  <script>
+    Polymer({
+      is: 'devices-list',
+
+      ready: function() {
+        // TODO: Replace with actual request
+        this.thngs = [{
+          photo: 'http://lorempixel.com/600/400/?' + Math.random(),
+          product: {
+            photos: ['http://lorempixel.com/600/400/?' + Math.random()]
+          },
+          name: 'Saber',
+          id: 'saber'
+        }, {
+          product: {
+            photos: ['http://lorempixel.com/600/400/?'+ Math.random()]
+          },
+          name: 'Jatagan',
+          id: 'jatagan'
+        }, {
+          product: {
+            photos: ['http://lorempixel.com/600/400/?'+ Math.random()]
+          },
+          name: 'Catana',
+          id: 'catana'
+        }];
+
+        this.$.list.fire('iron-resize');
+      }
+    });
+  </script>
+</dom-module>

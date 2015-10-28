@@ -1,0 +1,65 @@
+<dom-module id="hub-app">
+  <link rel="import" type="css" href="hub-app.css"/>
+
+  <template>
+
+    <paper-drawer-panel id="drawerPanel" responsive-width="1920px" drawer-width="{{drawerWidth}}">
+
+      <paper-header-panel class="list-panel" drawer mode="seamed">
+
+        <!-- List Toolbar -->
+        <paper-toolbar class$="{{toolbarClass}}"></paper-toolbar>
+
+        <!-- List -->
+        <paper-menu class="list" on-iron-activate="_listTap">
+          <paper-item></paper-item>
+          <paper-item></paper-item>
+          <paper-item></paper-item>
+        </paper-menu>
+
+      </paper-header-panel>
+
+      <paper-header-panel class="main-panel" main mode="{{mainMode}}">
+
+        <!-- Main Toolbar -->
+        <paper-toolbar class$="{{toolbarClass}}">
+          <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+        </paper-toolbar>
+
+        <div class="content">
+
+          <paper-material>
+            <devices-page settings="{{settings}}"></devices-page>
+          </paper-material>
+
+        </div>
+
+      </paper-header-panel>
+
+    </paper-drawer-panel>
+
+    <iron-media-query query="(max-width: 780px)" query-matches="{{_isMobile}}"></iron-media-query>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'hub-app',
+      properties: {
+        _isMobile: {
+          type: Boolean,
+          observer: '_isMobileChanged'
+        }
+      },
+      _listTap: function() {
+        this.$.drawerPanel.closeDrawer();
+      },
+      _isMobileChanged: function(isMobile) {
+        this.mainMode = isMobile ? 'seamed' : 'cover';
+        this.drawerWidth = isMobile ? '100%' : '320px';
+        this.toolbarClass = isMobile ? '' : 'tall';
+        this.updateStyles();
+      }
+    });
+  </script>
+</dom-module>
