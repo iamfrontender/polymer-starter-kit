@@ -11,23 +11,23 @@
         <paper-toolbar class$="{{toolbarClass}}"></paper-toolbar>
 
         <!-- List -->
-        <paper-menu class="list" on-iron-activate="_listTap">
-          <paper-item>
+        <paper-menu class="list" on-iron-select="_listTap">
+          <paper-item data-page="devices-page">
             <iron-icon icon="settings-remote"></iron-icon>
             <span>Devices</span>
             <paper-ripple></paper-ripple>
           </paper-item>
-          <paper-item>
+          <paper-item data-page="groups">
             <iron-icon icon="group-work"></iron-icon>
             <span>Groups</span>
             <paper-ripple></paper-ripple>
           </paper-item>
-          <paper-item>
+          <paper-item data-page="settings">
             <iron-icon icon="settings"></iron-icon>
             <span>Settings</span>
             <paper-ripple></paper-ripple>
           </paper-item>
-          <paper-item>
+          <paper-item on-tap="_logout">
             <iron-icon icon="open-in-new"></iron-icon>
             <span>Logout</span>
             <paper-ripple></paper-ripple>
@@ -58,6 +58,9 @@
                 <device-info-page  device="{{device}}"></device-info-page>
               </paper-material>
 
+              <paper-material name="settings">
+                <settings-page  settings="{{settings}}"></settings-page>
+              </paper-material>
 
             </neon-animated-pages>
         </div>
@@ -101,8 +104,16 @@
         this.page = 'devices-page';
       },
 
-      _listTap: function() {
+      _listTap: function(e, obj) {
         this.$.drawerPanel.closeDrawer();
+        this.page = e.detail.item.getAttribute('data-page') || 'devices-page';
+      },
+
+      _logout: function(e) {
+        e.stopPropagation();
+
+        // TODO: Do logout;
+        console.log('logged out!');
       },
 
       _isMobileChanged: function(isMobile) {

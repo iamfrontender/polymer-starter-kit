@@ -30,6 +30,7 @@ paper-menu iron-icon {
 
 .list paper-item {
   height: 80px;
+  position: relative;
   border-bottom: 1px solid #dedede;
   background-color: #fafafa;
 }

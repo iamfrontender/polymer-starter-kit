@@ -1,0 +1,45 @@
+section iron-image {
+  width: 100%;
+  height: 192px;
+  background-color: #E1F5FE;
+  opacity: .7;
+}
+
+section core-icon {
+  margin: 24px;
+  color: #039BE5;
+}
+
+section .details {
+  border-top: 1px solid lightgray;
+  color: #757575;
+  font-size: 14px;
+}
+
+section:first-of-type .details {
+  border: 0;
+}
+
+section .label {
+  margin-top: 2px;
+}
+
+section .title {
+  color: black;
+  font-size: 16px;
+  margin-bottom: 2px;
+}
+
+section .description {
+  margin-top: 16px;
+}
+
+section .item {
+  margin: 16px 16px 16px 0;
+}
+
+section .tag {
+  background-color: lightgray;
+  padding: 1px 4px;
+  border-radius: 2px;
+}

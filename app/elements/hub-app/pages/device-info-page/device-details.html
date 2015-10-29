@@ -1,10 +1,24 @@
 <dom-module id="device-details">
   <template>
-    <h1>Detail</h1>
+    <link rel="stylesheet" href="device-details.css"/>
+
+    <section id="details layout horizontal">
+      <iron-image src="{{device.product.photos.0}}" sizing="cover"></iron-image>
+
+      <div class="details flex layout vertical">
+        <div class="item">{{device.name}}</div>
+        <div class="label">{{device.id}}</div>
+        <div class="description" hidden?="{{device.description.length}}">{{device.description}}</div>
+      </div>
+    </section>
   </template>
   <script>
     Polymer({
-      is: 'device-details'
+      is: 'device-details',
+
+      properties: {
+        device: Object
+      }
     });
   </script>
 </dom-module>
