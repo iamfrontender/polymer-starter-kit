@@ -12,9 +12,26 @@
 
         <!-- List -->
         <paper-menu class="list" on-iron-activate="_listTap">
-          <paper-item></paper-item>
-          <paper-item></paper-item>
-          <paper-item></paper-item>
+          <paper-item>
+            <iron-icon icon="settings-remote"></iron-icon>
+            <span>Devices</span>
+            <paper-ripple></paper-ripple>
+          </paper-item>
+          <paper-item>
+            <iron-icon icon="group-work"></iron-icon>
+            <span>Groups</span>
+            <paper-ripple></paper-ripple>
+          </paper-item>
+          <paper-item>
+            <iron-icon icon="settings"></iron-icon>
+            <span>Settings</span>
+            <paper-ripple></paper-ripple>
+          </paper-item>
+          <paper-item>
+            <iron-icon icon="open-in-new"></iron-icon>
+            <span>Logout</span>
+            <paper-ripple></paper-ripple>
+          </paper-item>
         </paper-menu>
 
       </paper-header-panel>
@@ -27,18 +44,29 @@
         </paper-toolbar>
 
         <div class="content">
+            <neon-animated-pages id="pages"
+                                 selected="{{page}}"
+                                 attr-for-selected="name"
+                                 entry-animation="slide-from-right-animation"
+                                 exit-animation="slide-left-animation">
 
-          <paper-material>
-            <devices-page settings="{{settings}}"></devices-page>
-          </paper-material>
+              <paper-material name="devices-page">
+                <devices-page settings="{{settings}}"></devices-page>
+              </paper-material>
 
+              <paper-material name="device-info">
+                <device-info-page  device="{{device}}"></device-info-page>
+              </paper-material>
+
+
+            </neon-animated-pages>
         </div>
 
       </paper-header-panel>
 
     </paper-drawer-panel>
 
-    <iron-media-query query="(max-width: 780px)" query-matches="{{_isMobile}}"></iron-media-query>
+    <iron-media-query query="(max-width: 1024px)" query-matches="{{_isMobile}}"></iron-media-query>
 
   </template>
 
@@ -49,16 +77,47 @@
         _isMobile: {
           type: Boolean,
           observer: '_isMobileChanged'
+        },
+
+        device: {
+          notify: true
         }
       },
+
+      listeners: {
+        'device-changed': '_deviceChanged'
+      },
+
+      ready: function() {
+        //TODO: Replace with main
+        this.page = 'devices-page';
+      },
+
+      showDevice: function() {
+        this.page = 'device-info';
+      },
+
+      showDevicesPage: function() {
+        this.page = 'devices-page';
+      },
+
       _listTap: function() {
         this.$.drawerPanel.closeDrawer();
       },
+
       _isMobileChanged: function(isMobile) {
         this.mainMode = isMobile ? 'seamed' : 'cover';
         this.drawerWidth = isMobile ? '100%' : '320px';
         this.toolbarClass = isMobile ? '' : 'tall';
         this.updateStyles();
+      },
+
+      _deviceChanged: function(e) {
+        if (e.detail.value) {
+          this.showDevice();
+        } else {
+          this.showDevicesPage();
+        }
       }
     });
   </script>

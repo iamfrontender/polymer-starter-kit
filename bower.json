@@ -10,7 +10,8 @@
     "polymer": "Polymer/polymer#^1.2.0",
     "evrythng": "~3.3.2",
     "bower-mqttws": "~1.0.0",
-    "evrythng-ws": "~1.0.1"
+    "evrythng-ws": "~1.0.1",
+    "swipe-pages": "~0.2.0"
   },
   "devDependencies": {
     "test-fixture": "PolymerElements/test-fixture#^1.0.0",

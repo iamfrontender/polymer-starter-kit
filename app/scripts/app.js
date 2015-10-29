@@ -39,6 +39,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     console.log('Our app is ready to rock!');
   });
 
+  app.properties = {
+    device: {
+      notify: true
+    }
+  };
+
   // See https://github.com/Polymer/polymer/issues/1381
   window.addEventListener('WebComponentsReady', function() {
     // imports are loaded and elements have been registered

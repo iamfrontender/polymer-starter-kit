@@ -19,6 +19,10 @@ paper-toolbar {
   background-color: #42A5F5;
 }
 
+paper-menu iron-icon {
+  margin-right: 16px;
+}
+
 .list {
   padding: 0;
   border-right: 1px solid #ccc;
@@ -30,8 +34,10 @@ paper-toolbar {
   background-color: #fafafa;
 }
 
-.main-panel[mode=cover] .content {
-  padding: 0 64px 0 4px;
+paper-material {
+  padding: 10px;
+  min-height: 1400px;
+  background-color: #fff;
 }
 
 .main-panel {
@@ -40,13 +46,12 @@ paper-toolbar {
  };
 }
 
-paper-material {
-  padding: 20px;
-  height: 1400px;
-  background-color: #fff;
+.main-panel[mode=cover] paper-material {
+  max-width: 880px;
+  margin: 64px auto;
 }
 
-.main-panel[mode=cover] paper-material {
-  max-width: 920px;
-  margin: 64px auto;
+neon-animated-pages > :not(.iron-selected) {
+  transition: opacity .2s;
+  opacity: 0;
 }

@@ -1,0 +1,57 @@
+<link rel="import" href="device-info-page/device-details.html"/>
+<link rel="import" href="device-info-page/device-properties.html"/>
+<link rel="import" href="device-info-page/device-actions.html"/>
+
+<dom-module id="device-info-page">
+  <template>
+
+    <link rel="stylesheet" href="device-info-page.css"/>
+      <neon-animatable class="flex vertical">
+        <paper-toolbar class="medium-tall">
+          <div class="top">
+            <paper-icon-button icon="arrow-back" on-tap="_close"></paper-icon-button>
+            <span class="layout flex">{{device.name}}</span>
+          </div>
+
+          <div class="middle"></div>
+
+          <div class="tabs bottom fit">
+            <paper-tabs selected="{{tab}}">
+              <paper-tab>Details</paper-tab>
+              <paper-tab>Properties</paper-tab>
+              <paper-tab>Actions</paper-tab>
+            </paper-tabs>
+          </div>
+        </paper-toolbar>
+
+        <div class="content">
+          <neon-animated-pages id="" selected="{{tab}}">
+            <neon-animatable>
+              <device-details device="{{device}}"></device-details>
+            </neon-animatable>
+            <neon-animatable>
+              <device-properties device="{{device}}"></device-properties>
+            </neon-animatable>
+            <neon-animatable>
+              <device-actions device="{{device}}"></device-actions>
+            </neon-animatable>
+          </neon-animated-pages>
+        </div>
+      </neon-animatable>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'device-info-page',
+
+      ready: function() {
+        this.tab = 0;
+      },
+
+      _close: function () {
+        app.device = null;
+      }
+
+    });
+  </script>
+</dom-module>

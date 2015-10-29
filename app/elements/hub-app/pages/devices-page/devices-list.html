@@ -7,7 +7,7 @@
       No devices yet
     </div>
 
-    <iron-list items="{{thngs}}" as="thng" id="list" indexAs="id">
+    <iron-list items="{{thngs}}" as="thng" id="list" indexAs="id" selection-enabled>
       <template>
         <devices-list-item>
           <iron-image src="{{thng.product.photos.0}}" preload sizing="cover"></iron-image>
@@ -20,6 +20,17 @@
   <script>
     Polymer({
       is: 'devices-list',
+
+      properties: {
+        selectedItem: {
+          type: Object,
+          notify: true
+        }
+      },
+
+      listeners: {
+        'list.selected-item-changed': '_selectionChanged'
+      },
 
       ready: function() {
         // TODO: Replace with actual request
@@ -45,6 +56,10 @@
         }];
 
         this.$.list.fire('iron-resize');
+      },
+
+      _selectionChanged: function(e, item) {
+        app.device = e.detail.value;
       }
     });
   </script>
