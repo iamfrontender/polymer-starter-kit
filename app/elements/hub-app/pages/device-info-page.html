@@ -6,7 +6,6 @@
   <template>
 
     <link rel="stylesheet" href="device-info-page.css"/>
-      <neon-animatable class="flex vertical">
         <paper-toolbar class="medium-tall">
           <div class="top">
             <paper-icon-button icon="arrow-back" on-tap="_close"></paper-icon-button>
@@ -25,7 +24,11 @@
         </paper-toolbar>
 
         <div class="content">
-          <neon-animated-pages id="" selected="{{tab}}">
+          <neon-animated-pages id="device-info-pages"
+                               selected="{{tabSelected}}"
+                               entry-animation="{{entryAnimation}}"
+                               exit-animation="{{exitAnimation}}"
+            >
             <neon-animatable>
               <device-details device="{{device}}"></device-details>
             </neon-animatable>
@@ -37,12 +40,23 @@
             </neon-animatable>
           </neon-animated-pages>
         </div>
-      </neon-animatable>
-
   </template>
   <script>
     Polymer({
       is: 'device-info-page',
+
+      properties: {
+        // Using two different properties, since
+        // neon-animated-pages are catching update before custom observer.
+        // i.e. animation would work with -1 step offset.
+        tab: {
+          type: Number,
+          observer: '_tabChanged'
+        },
+        tabSelected: {
+          type: Number
+        }
+      },
 
       ready: function() {
         this.tab = 0;
@@ -50,6 +64,18 @@
 
       _close: function () {
         app.device = null;
+      },
+
+      _tabChanged: function(newIndex, oldIndex) {
+        if (newIndex < oldIndex) {
+          this.entryAnimation = 'slide-from-left-animation';
+          this.exitAnimation = 'slide-right-animation';
+        } else {
+          this.entryAnimation = 'slide-from-right-animation';
+          this.exitAnimation = 'slide-left-animation';
+        }
+
+        this.tabSelected = newIndex;
       }
 
     });

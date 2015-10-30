@@ -2,7 +2,7 @@
   overflow-y: auto;
 }
 
-section {
+:host section {
   padding: 0 16px;
   margin-bottom: 8px;
 }

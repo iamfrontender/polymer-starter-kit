@@ -22,7 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       wsServer: localStorage.getItem('wsServer') || 'wss://ws-test.evrythng.net:443/mqtt'
     },
     appApiKey: localStorage.getItem('apikey') ||
-    'o8xZ4ga4wsY87WpAo8bR8iN398L4bUxgCPiIIbSTOk8nB37FT29l8KnJcHpkZ3SHlXkEM9YbvY20GMOD',
+    'Ni7oQCVhZExJFFEmhonrrwady2jf41y8T2FgaMl5MJBYbs6aIjo3uqXXjcsiE5SigF5OZjwZwfBg7BLx',
     pollingPeriod: localStorage.getItem('polling') || 0
   };
 
@@ -41,6 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   app.properties = {
     device: {
+      type: Object,
       notify: true
     }
   };
@@ -88,5 +89,52 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   app.scrollPageToTop = function() {
     //app.$.headerPanelMain.scrollToTop(true);
   };
+
+  app.init = function() {
+
+    EVT.use(EVT.WS);
+
+    EVT.WS.setup({
+      apiUrl: this.settings.hosts.wsRemote,
+      localhostUrl: this.settings.hosts.wsLocal
+    });
+
+    EVT.setup({
+      apiUrl: this.settings.hosts.remote,
+      localhostUrl: this.settings.hosts.local,
+      timeout: 1000
+    });
+
+    // EVT App init
+    app.evt = new EVT.App({
+      apiKey: app.settings.appApiKey,
+      //facebook: true
+    });
+
+    app.evt.$init.then(function (result) {
+      //$this.user = result.user;
+
+      app.user = new EVT.User({
+        id: 'UDwVcpeRsBpa2KtCXRtN3cWa',
+        apiKey: 'LbL3NUSn0AQ6uwOtEfKd0GH1Th6fGxZL5Xr9Bz8f7G6f7PMCroULw6px5uzuxDsYEVySTcTsBzlAOgbp'
+      }, app.evt);
+
+      app.user.facebook = {
+        photo: 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xpf1/v/t1.0-1/p50x50/11903934_' +
+        '1481002198887411_373819594593573577_n.jpg?oh=9b0ab86f4a93e7b4add3fbc8fd2fd073&oe=569603A0&' +
+        '__gda__=1449019403_106e2cc807bdeb3167e57f498dd1e9ef',
+        first_name: 'George',
+        last_name: 'Generic'
+      };
+    }, function (err) {
+      // TODO show toast on error
+      /*showAlert('Could not initialize application. Facebook App Id not configured in ' +
+       'Dashboard or host not supported in FB Application settings.');*/
+      console.log('App init Error:', err);
+    });
+  };
+
+  app.init();
+
 
 })(document);

@@ -2,13 +2,64 @@
   <template>
     <link rel="stylesheet" href="device-details.css"/>
 
-    <section id="details layout horizontal">
-      <iron-image src="{{device.product.photos.0}}" sizing="cover"></iron-image>
+    <section id="details">
+      <iron-image hidden$="{{!_has(device, 'product.photos.0')}}" src="{{_get(device, 'product.photos.0')}}"
+                  sizing="cover"></iron-image>
+
+      <div class="details">
+        <div class="item">
+          <div class="paper-font-headline">{{_get(device, 'name')}}</div>
+        </div>
+        <div class="paper-font-subhead">{{_get(device, 'id')}}</div>
+        <div class="paper-font-body1 secondary" idden$="{{!_has(device, 'description')}}">{{_get(device, 'description')}}</div>
+      </div>
+    </section>
+
+    <section id="product" hidden$="{{!_has(device, 'product')}}" class="layout horizontal">
+      <iron-icon icon="class"></iron-icon>
+
+      <div class="details">
+        <div class="item">
+          <div class="paper-font-body2">{{_get(device, 'product.fn', 'Unknown')}}</div>
+          <div class="paper-font-caption">{{_get(device, 'product.id', '')}}</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="identifiers" hidden$="{{!_has(device, 'identifiers')}}" class="layout horizontal">
+      <iron-icon icon="info-outline"></iron-icon>
 
       <div class="details flex layout vertical">
-        <div class="item">{{device.name}}</div>
-        <div class="label">{{device.id}}</div>
-        <div class="description" hidden?="{{device.description.length}}">{{device.description}}</div>
+        <template is="dom-repeat" items="{{_keys(device, 'identifiers')}}" as="identifier">
+          <div class="item">
+            <div class="paper-font-body2">{{_get(device.identifiers, identifier)}}</div>
+            <div class="paper-font-caption">{{identifier}}</div>
+          </div>
+        </template>
+      </div>
+    </section>
+
+    <section id="custom-fields" hidden$="{{!_has(device, 'customFields')}}" class="layout horizontal">
+      <iron-icon icon="description"></iron-icon>
+
+      <div class="details flex layout vertical">
+        <template is="dom-repeat" items="{{_keys(device, 'customFields')}}" as="{{field}}">
+          <div class="item">
+            <div class="title">{{_get(device.customFields, field}}</div>
+            <div class="label">{{field}}</div>
+          </div>
+        </template>
+      </div>
+    </section>
+    <section id="tags" hidden$="{{!_has(device, 'tags')}}" class="layout horizontal">
+      <iron-icon icon="loyalty"></iron-icon>
+
+      <div class="details flex layout horizontal">
+        <div class="item">
+          <template is="dom-repeat" items="{{_get(device, 'tags')}}">
+            <span class="tag">{{item}}</span>
+          </template>
+        </div>
       </div>
     </section>
   </template>
@@ -16,8 +67,21 @@
     Polymer({
       is: 'device-details',
 
-      properties: {
-        device: Object
+      // TODO: Extract to extendable object
+      _has: function (source, property) {
+        return _.has(source, property) && !_.isEmpty(_.get(source, property));
+      },
+
+      _get: function (source, property, defaultValue) {
+        if (source) {
+          return _.get(source, property) || defaultValue;
+        } else {
+          return defaultValue;
+        }
+      },
+
+      _keys: function (source, property) {
+        return Object.keys(this._get(source, property, []));
       }
     });
   </script>

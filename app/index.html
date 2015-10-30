@@ -57,6 +57,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- For shared styles, shared-styles.html import in elements.html -->
   <style is="custom-style" include="shared-styles"></style>
 
+  <!-- build:js bower_components/lodash/lodash.js -->
+  <script src="bower_components/lodash/lodash.js"></script>
+  <!-- endbuild -->
+
   <!-- build:js bower_components/evrythng/dist/evrythng.js -->
   <script src="bower_components/evrythng/dist/evrythng.js"></script>
   <!-- endbuild -->
@@ -77,6 +81,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <hub-app settings="{{settings}}"
              device="{{device}}"
+             route="{{route}}"
+             user="{{user}}"
       ></hub-app>
 
     <paper-toast id="toast">
@@ -89,6 +95,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                  duration="6000"
                  text="Caching complete! This app will work offline.">
     </paper-toast>
+
 
     <platinum-sw-register auto-register
                           clients-claim

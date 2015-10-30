@@ -28,11 +28,20 @@ paper-menu iron-icon {
   border-right: 1px solid #ccc;
 }
 
-.list paper-item {
-  height: 80px;
+.list a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-decoration: none;
+  color: #000;
+
+  height: 64px;
+  padding: 10px;
   position: relative;
-  border-bottom: 1px solid #dedede;
-  background-color: #fafafa;
+}
+
+.list a:active {
+  color: #42A5F5;
 }
 
 paper-material {

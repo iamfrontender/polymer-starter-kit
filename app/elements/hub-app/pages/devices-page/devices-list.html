@@ -25,6 +25,14 @@
         selectedItem: {
           type: Object,
           notify: true
+        },
+        user: {
+          type: Object,
+          observer: 'refresh'
+        },
+        device: {
+          type: Object,
+          observer: 'refresh'
         }
       },
 
@@ -33,29 +41,49 @@
       },
 
       ready: function() {
-        // TODO: Replace with actual request
-        this.thngs = [{
-          photo: 'http://lorempixel.com/600/400/?' + Math.random(),
-          product: {
-            photos: ['http://lorempixel.com/600/400/?' + Math.random()]
-          },
-          name: 'Saber',
-          id: 'saber'
-        }, {
-          product: {
-            photos: ['http://lorempixel.com/600/400/?'+ Math.random()]
-          },
-          name: 'Jatagan',
-          id: 'jatagan'
-        }, {
-          product: {
-            photos: ['http://lorempixel.com/600/400/?'+ Math.random()]
-          },
-          name: 'Catana',
-          id: 'catana'
-        }];
+        this.refresh();
 
         this.$.list.fire('iron-resize');
+      },
+
+      refresh: function () {
+        if (this.user && !this.device) {
+          var $this = this;
+
+          this.user.thng().read({
+            localhost: true
+          }).then(function (thngs) {
+            $this.thngs = thngs;
+
+            var productIds = [];
+            thngs.forEach(function (thng) {
+              if(thng.product && productIds.indexOf(thng.product) === -1){
+                productIds.push(thng.product);
+              }
+            });
+
+            $this.user.product().read({
+              params: {
+                ids: productIds.join(',')
+              }
+            }).then(function (products) {
+              $this.thngs.forEach(function (thng) {
+                products.forEach(function (product) {
+                  if(products){
+                    if(thng.product === product.id){
+                      thng.product = product;
+                    }
+                  }
+                });
+
+                if(typeof thng.product === 'string'){
+                  thng.product = null;
+                }
+              });
+            });
+
+          });
+        }
       },
 
       _selectionChanged: function(e, item) {
