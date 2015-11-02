@@ -1,0 +1,19 @@
+<script>
+  EvtElements.behaviors.access = {
+    _has: function (source, property) {
+      return _.has(source, property) && !_.isEmpty(_.get(source, property));
+    },
+
+    _get: function (source, property, defaultValue) {
+      if (source) {
+        return _.get(source, property) || defaultValue;
+      } else {
+        return defaultValue;
+      }
+    },
+
+    _keys: function (source, property) {
+      return Object.keys(this._get(source, property, []));
+    }
+  };
+</script>

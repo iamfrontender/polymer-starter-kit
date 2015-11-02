@@ -47,7 +47,7 @@
       },
 
       refresh: function () {
-        if (this.user && !this.device) {
+        if (this.user && !this.thngs) {
           var $this = this;
 
           this.user.thng().read({
@@ -59,6 +59,17 @@
             thngs.forEach(function (thng) {
               if(thng.product && productIds.indexOf(thng.product) === -1){
                 productIds.push(thng.product);
+              }
+
+              // TODO: Development only
+              if (thng.properties.status) {
+                thng.customFields = {
+                  status: {
+                    values: {
+                      type: 'boolean'
+                    }
+                  }
+                };
               }
             });
 
@@ -86,7 +97,7 @@
         }
       },
 
-      _selectionChanged: function(e, item) {
+      _selectionChanged: function(e) {
         app.device = e.detail.value;
       }
     });

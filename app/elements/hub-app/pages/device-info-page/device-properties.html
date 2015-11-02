@@ -3,12 +3,12 @@
 <dom-module id="device-properties">
   <template>
     <section class="layout vertical">
-      <div class="item empty self-center">
+      <div hidden$="{{hasProperties(thng)}}" class="item empty self-center">
         No Properties
       </div>
 
-      <template is="dom-repeat" items="{{_keys(device, 'properties')}}">
-        <device-property property="{{_get(device, item)}}"></device-property>
+      <template is="dom-repeat" items="{{listProperties(thng)}}" as="propertyName">
+        <device-property property="{{getProperty(propertyName)}}" thng="{{thng}}"></device-property>
       </template>
     </section>
   </template>
@@ -16,31 +16,19 @@
     Polymer({
       is: 'device-properties',
 
+      behaviors: [
+        EvtElements.behaviors.access,
+        EvtElements.behaviors.thng
+      ],
+
       properties: {
-        device: {
+        thng: {
           type: Object,
-          observer: 'deviceChanged'
+          observer: 'thngChanged'
         }
       },
 
       loopInterval: null,
-
-      // TODO: Extract to extendable object
-      _has: function (source, property) {
-        return _.has(source, property) && !_.isEmpty(_.get(source, property));
-      },
-
-      _get: function (source, property, defaultValue) {
-        if (source) {
-          return _.get(source, property) || defaultValue;
-        } else {
-          return defaultValue;
-        }
-      },
-
-      _keys: function (source, property) {
-        return Object.keys(this._get(source, property, []));
-      },
 
       getType: function (input) {
         return typeof input === 'string' ? 'text' : 'number';
@@ -59,7 +47,7 @@
 
       refresh: function () {
         var $this = this;
-        this.device.property().read({
+        this.thng.property().read({
           localhost: true
         }).then(function (properties) {
           var colorX, colorY;
@@ -101,23 +89,23 @@
         });
       },
 
-      deviceChanged: function () {
+      thngChanged: function () {
         var $this = this;
-        if(this.device){
+        if(this.thng){
           if(parseInt(this.polling) !== 0){
             //this.loopInterval = setInterval(this.refresh.bind(this), this.polling);
           } else {
 
             // If polling interval is 0, subscribe via WebSockets.
             this.refresh();
-            this.device.property().subscribe(function(updatedProperties) {
+            this.thng.property().subscribe(function(updatedProperties) {
               if (Array.isArray(updatedProperties)) {
                 $this.addUpdatedProperties(updatedProperties);
               } else {
                 $this.addUpdatedProperty(updatedProperties);
               }
             }, function() {
-              console.log('Subscribed to: ' + $this.device.resource.path);
+              console.log('Subscribed to: ' + $this.thng.resource.path);
             });
           }
         } else {
@@ -171,7 +159,7 @@
             value = parseInt(value);
           }
 
-          this.device.property(this.selected.key).update(value, {
+          this.thng.property(this.selected.key).update(value, {
             localhost: true
           }).then(function (updated) {
             $this.selected.value = updated[0].value;
@@ -197,7 +185,7 @@
           });
         }
 
-        this.device.property(this.selected.key).update(value, {
+        this.thng.property(this.selected.key).update(value, {
           localhost: true
         }).then(function () {
           $this.selected = null;
@@ -211,7 +199,7 @@
         var $this = this,
           value = parseInt(target.value);
 
-        this.device.property(this.selected.key).update(value, {
+        this.thng.property(this.selected.key).update(value, {
           localhost: true
         }).then(function () {
           $this.selected = null;
@@ -228,7 +216,7 @@
 
         this.selected.name = color.name;
 
-        this.device.property().update({
+        this.thng.property().update({
           '_color_x': color['_color_x'],
           '_color_y': color['_color_y']
         }, {

@@ -67,22 +67,9 @@
     Polymer({
       is: 'device-details',
 
-      // TODO: Extract to extendable object
-      _has: function (source, property) {
-        return _.has(source, property) && !_.isEmpty(_.get(source, property));
-      },
-
-      _get: function (source, property, defaultValue) {
-        if (source) {
-          return _.get(source, property) || defaultValue;
-        } else {
-          return defaultValue;
-        }
-      },
-
-      _keys: function (source, property) {
-        return Object.keys(this._get(source, property, []));
-      }
+      behaviors: [
+        EvtElements.behaviors.access
+      ]
     });
   </script>
 </dom-module>
