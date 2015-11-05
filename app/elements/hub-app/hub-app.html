@@ -3,7 +3,45 @@
 
   <template>
 
-    <paper-drawer-panel id="drawerPanel" responsive-width="1920px" drawer-width="{{drawerWidth}}">
+    <style>
+
+      paper-toolbar.desktop {
+        box-shadow: 0 0 50px 0 rgba(0, 0, 0, .2);
+      }
+
+      paper-header-panel[drawer] {
+        box-shadow: 0 0 50px 0 rgba(0, 0, 0, .2);
+      }
+
+      .main-panel > paper-toolbar:before {
+        content: '';
+        background: url('../../images/evt_header_right.svg') no-repeat 98% 100%;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: .2;
+
+        background-size: contain;
+      }
+
+      .main-panel > paper-toolbar.desktop:before {
+        background-size: 400px;
+      }
+
+      footer {
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+      }
+
+      footer evt-logo {
+        max-width: 200px;
+        margin: 0 auto;
+        opacity: .3;
+      }
+    </style>
+
+    <paper-drawer-panel id="drawerPanel" responsive-width="1600px" drawer-width="{{drawerWidth}}">
 
       <paper-header-panel class="list-panel" drawer mode="seamed">
 
@@ -30,6 +68,10 @@
           </a>
         </paper-menu>
 
+        <footer>
+          <evt-logo></evt-logo>
+        </footer>
+
       </paper-header-panel>
 
       <paper-header-panel class="main-panel" main mode="{{mainMode}}">
@@ -50,8 +92,12 @@
                 <devices-page device="{{device}}" user="{{user}}"></devices-page>
               </paper-material>
 
+              <paper-material data-route="groups" elevation="3">
+                <evt-user-groups></evt-user-groups>
+              </paper-material>
+
               <paper-material data-route="device-info" elevation="3">
-                <device-info-page  device="{{device}}"></device-info-page>
+                <device-info-page  device="{{device}}" user="{{user}}"></device-info-page>
               </paper-material>
 
               <paper-material data-route="settings" elevation="3">
@@ -65,7 +111,7 @@
 
     </paper-drawer-panel>
 
-    <iron-media-query query="(max-width: 1024px)" query-matches="{{_isMobile}}"></iron-media-query>
+    <iron-media-query query="(max-width: 920px)" query-matches="{{_isMobile}}"></iron-media-query>
 
   </template>
 
@@ -87,12 +133,20 @@
         'device-changed': '_deviceChanged'
       },
 
+      scrollToTop: function() {
+
+      },
+
       showDevice: function() {
-        app.route = 'device-info';
+        this._showPage('device-info');
       },
 
       showDevicesPage: function() {
-        app.route = 'devices';
+        this._showPage('devices');
+      },
+
+      showGroups: function() {
+        this._showPage('groups');
       },
 
       _listTap: function(e, obj) {
@@ -106,18 +160,22 @@
         console.log('logged out!');
       },
 
+      _showPage: function(page) {
+        _.defer(function() {
+          app.route = page;
+        });
+      },
+
       _isMobileChanged: function(isMobile) {
         this.mainMode = isMobile ? 'seamed' : 'cover';
         this.drawerWidth = isMobile ? '100%' : '320px';
-        this.toolbarClass = isMobile ? '' : 'tall';
+        this.toolbarClass = isMobile ? '' : 'tall desktop';
         this.updateStyles();
       },
 
       _deviceChanged: function(e) {
-        if (e.detail.value) {
+        if (e.detail.value && !_.isEmpty(e.detail.value)) {
           this.showDevice();
-        } else {
-          this.showDevicesPage();
         }
       }
     });

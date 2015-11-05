@@ -1,14 +1,4 @@
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
-<link rel="import" href="devices-page/devices-list.html"/>
+<!--<link rel="import" href="devices-page/devices-list.html"/>-->
 
 <dom-module id="devices-page">
   <template>
@@ -19,13 +9,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <link rel="stylesheet" href="devices-page.css">
-
-    <devices-list device="{{device}}" user="{{user}}"></devices-list>
+    <evt-thng-list on-thng-selected="_onThngSelected" user="{{user}}"></evt-thng-list>
   </template>
-
   <script>
     Polymer({
-      is: 'devices-page'
+      is: 'devices-page',
+
+      _onThngSelected: function(e) {
+        app.device = e.detail;
+
+        if (app.device && app.device.id) {
+          page.redirect('/devices/' + app.device.id);
+        }
+      }
     });
   </script>
 

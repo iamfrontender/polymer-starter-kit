@@ -12,7 +12,8 @@
     "bower-mqttws": "~1.0.0",
     "evrythng-ws": "~1.0.1",
     "swipe-pages": "~0.2.0",
-    "lodash": "~3.10.1"
+    "lodash": "~3.10.1",
+    "evt-elements": "*"
   },
   "devDependencies": {
     "test-fixture": "PolymerElements/test-fixture#^1.0.0",

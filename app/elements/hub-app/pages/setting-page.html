@@ -18,6 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <link rel="stylesheet" href="settings-page.css">
 
     <h1>Settings</h1>
+
     <div class="scrollable-panel">
       <section id="hosts" on-change="validate">
         <div class="subheader">Hosts</div>
@@ -29,7 +30,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                      error-message="Please type a URL."
                      type="url"
                      placeholder="E.g. http://192.168.1.7:8080"
-          ></paper-input>
+        ></paper-input>
 
         <paper-input id="remotehost"
                      label="EVRYTHNG API Address"
@@ -38,7 +39,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                      error-message="Please type a URL."
                      type="url"
                      placeholder="E.g. https://api.evrythng.com"
-          ></paper-input>
+        ></paper-input>
 
         <paper-input id="wsServer"
                      label="Local hub WebSockets server"
@@ -47,7 +48,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                      error-message="Please type a URL."
                      type="url"
                      placeholder="E.g. wss://192.168.0.13:443/mqtt"
-          ></paper-input>
+        ></paper-input>
       </section>
 
       <section id="authentication" on-change="validate">
@@ -59,7 +60,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         required
                         auto-validate
                         placeholder="Application API Key"
-          ></paper-textarea>
+        ></paper-textarea>
 
       </section>
 
@@ -84,7 +85,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <paper-fab icon="done" on-tap="updateSettings" disabled?="{{!validForm}}"></paper-fab>
 
-    <!--<paper-toast id="toast" text="Settings updated."></paper-toast>-->
+    <paper-toast id="toast" text="Settings updated."></paper-toast>
   </template>
 
   <script>
@@ -108,15 +109,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.refresh();
       },
 
-      validate: function () {
+      validate: function() {
         this.validForm = this.$.localhost.inputElement.validity.valid &&
           this.$.remotehost.inputElement.validity.valid &&
           this.$.wsServer.inputElement.validity.valid &&
           this.$.apikey.inputElement.textarea.validity.valid;
       },
 
-      updateSettings: function () {
-        if(this.validForm){
+      updateSettings: function() {
+        if (this.validForm) {
           this.settings = {
             hosts: {
               local: this.$.localhost.value,

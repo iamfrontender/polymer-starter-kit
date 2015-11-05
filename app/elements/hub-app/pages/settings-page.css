@@ -11,10 +11,6 @@ section:first-of-type {
   border: 0;
 }
 
-section:last-of-type {
-  margin-bottom: 100px;
-}
-
 paper-fab {
   position: fixed;
   bottom: 48px;
@@ -38,16 +34,4 @@ section > label {
   display: block;
   font-size: 0.75em;
   margin-top: 10px;
-}
-
-paper-slider::shadow #sliderBar::shadow #activeProgress,
-paper-slider::shadow #sliderKnobInner,
-paper-slider::shadow #sliderKnobInner::before,
-paper-input-decorator::shadow .focused-underline
-{
-  background-color: #0288D1;
-}
-
-paper-input-decorator[focused]::shadow .floated-label .label-text {
-  color: #0288D1;
 }

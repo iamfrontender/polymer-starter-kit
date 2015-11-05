@@ -26,19 +26,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     pollingPeriod: localStorage.getItem('polling') || 0
   };
 
-  app.displayInstalledToast = function() {
-    // Check to make sure caching is actually enabled—it won't be in the dev environment.
-    if (!Polymer.dom(document).querySelector('platinum-sw-cache').disabled) {
-      Polymer.dom(document).querySelector('#caching-complete').show();
-    }
-  };
-
-  // Listen for template bound event to know when bindings
-  // have resolved and content has been stamped to the page
-  app.addEventListener('dom-change', function() {
-    console.log('Our app is ready to rock!');
-  });
-
   app.properties = {
     device: {
       type: Object,
@@ -52,31 +39,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   });
 
-  // Main area's paper-scroll-header-panel custom condensing transformation of
-  // the appName in the middle-container and the bottom title in the bottom-container.
-  // The appName is moved to top and shrunk on condensing. The bottom sub title
-  // is shrunk to nothing on condensing.
-  window.addEventListener('paper-header-transform', function(e) {
-    var appName = Polymer.dom(document).querySelector('#mainToolbar .app-name');
-    var middleContainer = Polymer.dom(document).querySelector('#mainToolbar .middle-container');
-    var bottomContainer = Polymer.dom(document).querySelector('#mainToolbar .bottom-container');
-    var detail = e.detail;
-    var heightDiff = detail.height - detail.condensedHeight;
-    var yRatio = Math.min(1, detail.y / heightDiff);
-    var maxMiddleScale = 0.50;  // appName max size when condensed. The smaller the number the smaller the condensed size.
-    var scaleMiddle = Math.max(maxMiddleScale, (heightDiff - detail.y) / (heightDiff / (1-maxMiddleScale))  + maxMiddleScale);
-    var scaleBottom = 1 - yRatio;
-
-    // Move/translate middleContainer
-    Polymer.Base.transform('translate3d(0,' + yRatio * 100 + '%,0)', middleContainer);
-
-    // Scale bottomContainer and bottom sub title to nothing and back
-    Polymer.Base.transform('scale(' + scaleBottom + ') translateZ(0)', bottomContainer);
-
-    // Scale middleContainer appName
-    Polymer.Base.transform('scale(' + scaleMiddle + ') translateZ(0)', appName);
-  });
-
   // Close drawer after menu item is selected if drawerPanel is narrow
   app.onDataRouteClick = function() {
     var drawerPanel = Polymer.dom(document).querySelector('#paperDrawerPanel');
@@ -87,7 +49,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   // Scroll page to top and expand header
   app.scrollPageToTop = function() {
-    //app.$.headerPanelMain.scrollToTop(true);
+    app.$.hubApp.scrollToTop(true);
+  };
+
+  app.notifyListResize = function() {
+    Array.prototype.slice.call(document.querySelectorAll('iron-list')).forEach(function(list) {
+      list.notifyResize()
+    })
+  };
+
+  app.hasDevice = function() {
+    return app.device !== null;
+  };
+
+  app.isThisDeviceLoaded = function(id) {
+    return app.hasDevice() && app.device.id === id;
+  };
+
+  app.loadDevice = function(id) {
+    var devices = document.querySelector('evt-thng-list').thngs;
+    var device = _.find(devices, {
+      id: id
+    });
+
+    if (device) {
+      app.device = device;
+    } else {
+      app.$.toast.text = 'Cannot find device with ' + id + ' id';
+      app.$.toast.show();
+
+      page.redirect('/');
+    }
   };
 
   app.init = function() {
@@ -107,7 +99,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     // EVT App init
     app.evt = new EVT.App({
-      apiKey: app.settings.appApiKey,
+      apiKey: app.settings.appApiKey
       //facebook: true
     });
 
@@ -127,10 +119,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         last_name: 'Generic'
       };
     }, function (err) {
-      // TODO show toast on error
-      /*showAlert('Could not initialize application. Facebook App Id not configured in ' +
-       'Dashboard or host not supported in FB Application settings.');*/
-      console.log('App init Error:', err);
+      app.$.toast.text = 'Error: ' + err.message;
+      app.$.toast.show();
     });
   };
 

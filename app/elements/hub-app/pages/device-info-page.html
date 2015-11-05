@@ -1,10 +1,5 @@
-<link rel="import" href="device-info-page/device-details.html"/>
-<link rel="import" href="device-info-page/device-properties.html"/>
-<link rel="import" href="device-info-page/device-actions.html"/>
-
 <dom-module id="device-info-page">
   <template>
-
     <link rel="stylesheet" href="device-info-page.css"/>
         <paper-toolbar class="medium-tall">
           <div class="top">
@@ -30,13 +25,13 @@
                                exit-animation="{{exitAnimation}}"
             >
             <neon-animatable>
-              <device-details device="{{device}}"></device-details>
+              <evt-thng-full thng="{{device}}"></evt-thng-full>
             </neon-animatable>
             <neon-animatable>
-              <device-properties thng="{{device}}"></device-properties>
+              <evt-thng-properties thng="{{device}}"></evt-thng-properties>
             </neon-animatable>
             <neon-animatable>
-              <device-actions device="{{device}}"></device-actions>
+              <evt-thng-actions user={{user}} thng="{{device}}"></evt-thng-actions>
             </neon-animatable>
           </neon-animated-pages>
         </div>
@@ -64,6 +59,8 @@
 
       _close: function () {
         app.device = null;
+
+        page.back();
       },
 
       _tabChanged: function(newIndex, oldIndex) {

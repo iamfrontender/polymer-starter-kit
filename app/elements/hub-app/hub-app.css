@@ -16,7 +16,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 }
 
 paper-toolbar {
-  background-color: #42A5F5;
+  display: block;
+  background: #42A5F5;
 }
 
 paper-menu iron-icon {
@@ -25,7 +26,6 @@ paper-menu iron-icon {
 
 .list {
   padding: 0;
-  border-right: 1px solid #ccc;
 }
 
 .list a {
@@ -33,7 +33,7 @@ paper-menu iron-icon {
   flex-direction: column;
   justify-content: center;
   text-decoration: none;
-  color: #000;
+  color: #3c3c3c;
 
   height: 64px;
   padding: 10px;
@@ -46,7 +46,7 @@ paper-menu iron-icon {
 
 paper-material {
   padding: 10px;
-  min-height: 1400px;
+  min-height: 1020px;
   background-color: #fff;
 }
 
@@ -58,7 +58,7 @@ paper-material {
 
 .main-panel[mode=cover] paper-material {
   max-width: 880px;
-  margin: 64px auto;
+  margin: 64px 10px;
 }
 
 neon-animated-pages > :not(.iron-selected) {
