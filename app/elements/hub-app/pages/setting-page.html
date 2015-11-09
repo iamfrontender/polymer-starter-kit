@@ -89,9 +89,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
+
+    /**
+     * Settings page element, allows editing and storing of appliation settings.
+     */
     Polymer({
+
+      /**
+       * @see Polymer.Base.is
+       */
       is: 'settings-page',
 
+      /**
+       * Refreshes the content, fetching the values from current settings.
+       */
       refresh: function() {
         this.$.localhost.value = this.settings.hosts.local;
         this.$.remotehost.value = this.settings.hosts.remote;
@@ -105,10 +116,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.apikey.validate();
       },
 
+      /**
+       * @see Polymer.Base#ready
+       */
       ready: function() {
         this.refresh();
       },
 
+      /**
+       * Validates the current settings.
+       */
       validate: function() {
         this.validForm = this.$.localhost.inputElement.validity.valid &&
           this.$.remotehost.inputElement.validity.valid &&
@@ -116,6 +133,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.apikey.inputElement.textarea.validity.valid;
       },
 
+      /**
+       * Updates the settings in case of validity.
+       */
       updateSettings: function() {
         if (this.validForm) {
           this.settings = {
@@ -128,22 +148,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             pollingPeriod: this.$.polling.value * 1000
           };
 
-          localStorage.setItem('localhost', this.settings.hosts.local);
-          localStorage.setItem('remotehost', this.settings.hosts.remote);
-          localStorage.setItem('wsServer', this.settings.hosts.wsServer);
-          localStorage.setItem('apikey', this.settings.appApiKey);
-          localStorage.setItem('polling', this.settings.pollingPeriod);
-
-          EVT.setup({
-            apiUrl: this.settings.hosts.remote,
-            localhostUrl: this.settings.hosts.local,
-            apiKey: this.settings.appApiKey
-          });
-
-          EVT.WS.setup({
-            apiUrl: this.settings.hosts.wsServer
-          });
-
+          // Confirm success to the user.
           this.$.toast.show();
         }
       }

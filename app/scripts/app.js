@@ -15,6 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
   var app = document.querySelector('#app');
 
+  // Pick saved or default application settings
   app.settings = {
     hosts: {
       local: localStorage.getItem('localhost') || 'http://192.168.0.12:8080',
@@ -25,19 +26,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     'Ni7oQCVhZExJFFEmhonrrwady2jf41y8T2FgaMl5MJBYbs6aIjo3uqXXjcsiE5SigF5OZjwZwfBg7BLx',
     pollingPeriod: localStorage.getItem('polling') || 0
   };
-
-  app.properties = {
-    device: {
-      type: Object,
-      notify: true
-    }
-  };
-
-  // See https://github.com/Polymer/polymer/issues/1381
-  window.addEventListener('WebComponentsReady', function() {
-    // imports are loaded and elements have been registered
-
-  });
 
   // Close drawer after menu item is selected if drawerPanel is narrow
   app.onDataRouteClick = function() {
@@ -52,20 +40,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     app.$.hubApp.scrollToTop(true);
   };
 
+  // Update offsets for all lists available in application.
   app.notifyListResize = function() {
     Array.prototype.slice.call(document.querySelectorAll('iron-list')).forEach(function(list) {
       list.notifyResize()
-    })
+    });
   };
 
+  // Checks if application has selected device.
   app.hasDevice = function() {
     return app.device !== null;
   };
 
+  // Checks if device with given id is in the view atm.
   app.isThisDeviceLoaded = function(id) {
     return app.hasDevice() && app.device.id === id;
   };
 
+  // Loads the device in the view by its id.
   app.loadDevice = function(id) {
     var devices = document.querySelector('evt-thng-list').thngs;
     var device = _.find(devices, {
@@ -82,6 +74,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
   };
 
+  // Instantiates the Evrythng application.
   app.init = function() {
 
     EVT.use(EVT.WS);
@@ -124,7 +117,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     });
   };
 
+  // Launch.
   app.init();
-
-
 })(document);

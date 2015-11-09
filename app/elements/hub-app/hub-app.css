@@ -44,23 +44,6 @@ paper-menu iron-icon {
   color: #42A5F5;
 }
 
-paper-material {
-  padding: 10px;
-  min-height: 1020px;
-  background-color: #fff;
-}
-
-.main-panel {
---paper-header-panel-cover-container: {
-   left: 64px;
- };
-}
-
-.main-panel[mode=cover] paper-material {
-  max-width: 880px;
-  margin: 64px 10px;
-}
-
 neon-animated-pages > :not(.iron-selected) {
   transition: opacity .2s;
   opacity: 0;

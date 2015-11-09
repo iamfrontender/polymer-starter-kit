@@ -4,7 +4,6 @@
   <template>
 
     <style>
-
       paper-toolbar.desktop {
         box-shadow: 0 0 50px 0 rgba(0, 0, 0, .2);
       }
@@ -39,10 +38,28 @@
         margin: 0 auto;
         opacity: .3;
       }
+
+
+      paper-material {
+        padding: 10px;
+        min-height: 1020px;
+        background-color: #fff;
+      }
+
+      .main-panel {
+        --paper-header-panel-cover-container: {
+          left: 64px;
+        };
+      }
+
+      .main-panel[mode=cover] paper-material {
+        max-width: 880px;
+        margin: 64px 10px;
+      }
+
     </style>
 
     <paper-drawer-panel id="drawerPanel" responsive-width="1600px" drawer-width="{{drawerWidth}}">
-
       <paper-header-panel class="list-panel" drawer mode="seamed">
 
         <!-- List Toolbar -->
@@ -116,56 +133,108 @@
   </template>
 
   <script>
+    /**
+     * Hub app elements, implements the application container.
+     */
     Polymer({
+
+      /**
+       * @see Polymer.Base.is
+       */
       is: 'hub-app',
+
+      /**
+       * @see Polymer.Base.properies
+       */
       properties: {
+        /**
+         * Represents the responsive state of layout.
+         */
         _isMobile: {
           type: Boolean,
           observer: '_isMobileChanged'
         },
 
+        /**
+         * Contains current application device.
+         */
         device: {
           notify: true
         }
       },
 
+      /**
+       * @see Polymer.Base.listeners
+       */
       listeners: {
         'device-changed': '_deviceChanged'
       },
 
+      /**
+       * Scrolls the selected page to top.
+       */
       scrollToTop: function() {
-
+        this.$$('.main-panel').$.mainContainer.scrollTop = 0;
       },
 
+      /**
+       * Shows the device info page.
+       */
       showDevice: function() {
         this._showPage('device-info');
       },
 
+      /**
+       * Shows the page with list of available devices
+       */
       showDevicesPage: function() {
         this._showPage('devices');
       },
 
+      /**
+       * Shows the groups page.
+       */
       showGroups: function() {
         this._showPage('groups');
       },
 
+      /**
+       * Common handler for menu tap. When triggered, it should be closed.
+       */
       _listTap: function(e, obj) {
         this.$.drawerPanel.closeDrawer();
       },
 
+      /**
+       * Performs the logout from application.
+       */
       _logout: function(e) {
         e.stopPropagation();
 
         // TODO: Do logout;
-        console.log('logged out!');
       },
 
+      /**
+       * Shows the selected page.
+       *
+       * @param {String} page
+       */
       _showPage: function(page) {
+        // Redirect happens at the same time when application
+        // tries to propagate the common data resources change
+        // accross the significant amount of nodes.
+        // It's better to delay the actual relocation till
+        // the data is loaded to the components.
         _.defer(function() {
           app.route = page;
         });
       },
 
+      /**
+       * Handles layout change.
+       *
+       * @param {Boolean} isMobile
+       */
       _isMobileChanged: function(isMobile) {
         this.mainMode = isMobile ? 'seamed' : 'cover';
         this.drawerWidth = isMobile ? '100%' : '320px';
@@ -173,6 +242,9 @@
         this.updateStyles();
       },
 
+      /**
+       * Handles change of chosen device, if it was really chosen, shows the info page.
+       */
       _deviceChanged: function(e) {
         if (e.detail.value && !_.isEmpty(e.detail.value)) {
           this.showDevice();

@@ -1,45 +1,59 @@
 <dom-module id="device-info-page">
   <template>
     <link rel="stylesheet" href="device-info-page.css"/>
-        <paper-toolbar class="medium-tall">
-          <div class="top">
-            <paper-icon-button icon="arrow-back" on-tap="_close"></paper-icon-button>
-            <span class="layout flex">{{device.name}}</span>
-          </div>
 
-          <div class="middle"></div>
-
-          <div class="tabs bottom fit">
-            <paper-tabs selected="{{tab}}">
-              <paper-tab>Details</paper-tab>
-              <paper-tab>Properties</paper-tab>
-              <paper-tab>Actions</paper-tab>
-            </paper-tabs>
-          </div>
-        </paper-toolbar>
-
-        <div class="content">
-          <neon-animated-pages id="device-info-pages"
-                               selected="{{tabSelected}}"
-                               entry-animation="{{entryAnimation}}"
-                               exit-animation="{{exitAnimation}}"
-            >
-            <neon-animatable>
-              <evt-thng-full thng="{{device}}"></evt-thng-full>
-            </neon-animatable>
-            <neon-animatable>
-              <evt-thng-properties thng="{{device}}"></evt-thng-properties>
-            </neon-animatable>
-            <neon-animatable>
-              <evt-thng-actions user={{user}} thng="{{device}}"></evt-thng-actions>
-            </neon-animatable>
-          </neon-animated-pages>
+    <paper-header-panel>
+      <paper-toolbar class="medium-tall">
+        <div class="top">
+          <paper-icon-button icon="arrow-back" on-tap="_close"></paper-icon-button>
+          <span class="layout flex">{{device.name}}</span>
         </div>
+
+        <div class="middle"></div>
+
+        <div class="tabs bottom fit">
+          <paper-tabs selected="{{tab}}">
+            <paper-tab>Details</paper-tab>
+            <paper-tab>Properties</paper-tab>
+            <paper-tab>Actions</paper-tab>
+          </paper-tabs>
+        </div>
+      </paper-toolbar>
+
+      <div class="content">
+        <neon-animated-pages id="device-info-pages"
+                             selected="{{tabSelected}}"
+                             entry-animation="{{entryAnimation}}"
+                             exit-animation="{{exitAnimation}}"
+        >
+          <neon-animatable>
+            <evt-thng-full thng="{{device}}"></evt-thng-full>
+          </neon-animatable>
+          <neon-animatable>
+            <evt-thng-properties thng="{{device}}"></evt-thng-properties>
+          </neon-animatable>
+          <neon-animatable>
+            <evt-thng-actions user={{user}} thng="{{device}}"></evt-thng-actions>
+          </neon-animatable>
+        </neon-animated-pages>
+      </div>
+    </paper-header-panel>
   </template>
   <script>
+
+    /**
+     * Simple wrapper element for evt-thng, evt-thng-properties and evt-thng-actions elements.
+     */
     Polymer({
+
+      /**
+       * @see Polymer.Base.is
+       */
       is: 'device-info-page',
 
+      /**
+       * @see Polymer.Base.properties
+       */
       properties: {
         // Using two different properties, since
         // neon-animated-pages are catching update before custom observer.
@@ -53,17 +67,27 @@
         }
       },
 
-      ready: function() {
+      /**
+       * @see Polymer.Base#ready
+       */
+      ready: function () {
         this.tab = 0;
       },
 
+      /**
+       * 'Closes' this page by removing the selected device reference.
+       */
       _close: function () {
         app.device = null;
 
         page.back();
       },
 
-      _tabChanged: function(newIndex, oldIndex) {
+      /**
+       * Handles the change of selected tab, assigning appropriate animation (left or right)
+       * before the actual transition.
+       */
+      _tabChanged: function (newIndex, oldIndex) {
         if (newIndex < oldIndex) {
           this.entryAnimation = 'slide-from-left-animation';
           this.exitAnimation = 'slide-right-animation';

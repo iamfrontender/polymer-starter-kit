@@ -12,13 +12,24 @@
     <evt-thng-list on-thng-selected="_onThngSelected" user="{{user}}"></evt-thng-list>
   </template>
   <script>
+    /**
+     * Superthin wrapper over the evt-thng-list element.
+     */
     Polymer({
+      /**
+       * @see Polymer.Base.is
+       */
       is: 'devices-page',
 
+      /**
+       * Handles selection of thng from the list.
+       */
       _onThngSelected: function(e) {
+        // Assign current selection
         app.device = e.detail;
 
         if (app.device && app.device.id) {
+          // If device was really selected, update path.
           page.redirect('/devices/' + app.device.id);
         }
       }
